@@ -4,29 +4,35 @@
 
 <template>
   <div>
-    <NavBar />
-    <banner />
-    <!-- <ItemsList /> -->
-    <Form />
-    <!-- <Cards></Cards> -->
+    <NavBar></NavBar>
+    <banner></banner>
+    <!-- <Form></Form> -->
+    <FormV2></FormV2>
+    <Cards></Cards>
+    <Card2></Card2>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import NavBar from '~/components/NavBar.vue';
-import ItemsList from '~/components/ItemsList.vue';
+import Footer from "~/components/default/Footer.vue";
 import banner from '~/components/homePage/banner.vue';
 import Form from '~/components/homePage/Form.vue';
-// import Cards from '~/components/Cards.vue';
+import FormV2 from '~/components/homePage/FormV2.vue';
+import Cards from '~/components/Cards.vue';
+import Card2 from '~/components/Card2.vue';
+
 
 export default {
   components: {
     NavBar,
-    ItemsList,
+    Footer,
     banner,
     Form,
-    // Cards,
-
+    FormV2,
+    Cards,
+    Card2,
   },
 };
 </script>
