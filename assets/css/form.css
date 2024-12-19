@@ -2,13 +2,11 @@
   max-width: 500px;
   width: 100%;
   background-color: #f9f9f9;
-  /* background-color: #e8efff; */
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Заголовок формы */
 .form-title {
   font-size: 1.8rem;
   margin-bottom: 1rem;
@@ -16,12 +14,10 @@
   color: #333;
 }
 
-/* Базовый стиль для групп элементов формы */
 .form-group {
   margin-bottom: 1rem;
 }
 
-/* Метки (label) формы */
 .form-group label {
   font-size: 1rem;
   color: #333;
@@ -29,7 +25,6 @@
   display: block;
 }
 
-/* Текстовые поля формы */
 .form-input,
 .form-textarea,
 .form-select {
@@ -41,13 +36,11 @@
   color: #333;
 }
 
-/* Текстовое поле для описания */
 .form-textarea {
   resize: vertical;
   min-height: 100px;
 }
 
-/* Стили для выпадающих списков (select) */
 .form-select {
   appearance: none;
   background-color: #fff;
@@ -57,13 +50,11 @@
   background-size: 1rem;
 }
 
-/* Чекбоксы */
 .form-checkbox {
   margin-right: 0.5rem;
   transform: scale(1.2);
 }
 
-/* Подкатегории и теги */
 .cat {
   display: flex;
   flex-wrap: wrap;
@@ -83,7 +74,6 @@
   justify-content: flex-end;
 }
 
-/* Кнопка отправки */
 .submit-button {
   width: 30%;
   padding: 0.8rem;
@@ -100,7 +90,6 @@
   background-color: #0056b3;
 }
 
-/* Сообщения статуса формы */
 .status-message {
   margin-top: 1rem;
   padding: 0.8rem;

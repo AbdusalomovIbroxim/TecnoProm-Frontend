@@ -234,14 +234,12 @@ export default {
 
     selectedCountry(newCountry) {
       console.log('selectedCountry:', newCountry);
-      this.selectedCity = null; // Сбрасываем выбранный город
+      this.selectedCity = null;
 
-      // Загружаем города только если selectedCountry === 1
       if (newCountry === 1) {
-        this.fetchCities(); // Вызываем загрузку городов
+        this.fetchCities();
       }
 
-      // Обновляем placeholder для телефона
       this.updatePhoneCode();
     },
 

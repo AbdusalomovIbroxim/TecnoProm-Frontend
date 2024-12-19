@@ -1,11 +1,12 @@
 // /store/auth.js
 
-import { login, register, refreshToken } from "@/api/auth"; // Добавьте импорт функции login
+import { login, register, refreshToken, fetchUser } from "@/api/auth"; // Добавьте импорт функции login
 
 export default {
   state: {
     token: '',
     isAuthenticated: false,
+    user: null,
     formStatus: null,
   },
   mutations: {
@@ -17,39 +18,48 @@ export default {
       state.token = '';
       state.isAuthenticated = false;
     },
+    setUser(state, user) {
+      state.user = user;
+    },
     setFormStatus(state, status) {
       state.formStatus = status;
     },
   },
   actions: {
-    initializeAuth({ commit }) {
+    async initializeAuth({ dispatch }) {
       if (process.client) {
         const token = localStorage.getItem('token');
         if (token) {
-          commit('setToken', token);
+          await dispatch('fetchCurrentUser');
         }
       }
     },
-
-    async loginUser({ commit }, { username, password }) {
+    async fetchCurrentUser({ commit }) {
       try {
-        const response = await login(username, password); // Используем функцию login
-        console.log('Login response:', response);  // Логирование ответа
+        const user = await fetchUser();
+        commit('setUser', user);
+        commit('setFormStatus', 'success');
+      } catch (error) {
+        console.error('Ошибка при получении данных пользователя:', error.message);
+        commit('removeToken');
+      }
+    },
+
+    async loginUser({ commit }, { telephone, password }) {
+      try {
+        const response = await login(telephone, password);
     
-        if (response && response.access && response.refresh) {
-          localStorage.setItem('token', response.access);  // Сохранение access токена
-          localStorage.setItem('refresh_token', response.refresh);  // Сохранение refresh токена
-          commit('setToken', response.access);  // Сохранение access токена в Vuex
-          commit('setFormStatus', 'success');
+        if (response && response.message === 'Вход успешен, OTP отправлен на ваш телефон') {
+          commit('setFormStatus', 'otp');
+          return 'otp';
         } else {
           commit('setFormStatus', 'error');
-          console.error('Ошибка: Токены не получены');
         }
       } catch (error) {
         commit('setFormStatus', 'error');
-        console.error('Ошибка при входе:', error.message);
+        throw error;
       }
-    },    
+    },     
 
     async registerUser({ commit }, { username, password }) {
       try {
@@ -75,9 +85,11 @@ export default {
     logoutUser({ commit }) {
       if (process.client) {
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
       }
       commit('removeToken');
     },
+
   },
   getters: {
     getToken(state) {
@@ -85,6 +97,9 @@ export default {
     },
     isAuthenticated(state) {
       return state.isAuthenticated;
+    },
+    currentUser(state) {
+      return state.user;
     },
     authFormStatus(state) {
       return state.formStatus;
