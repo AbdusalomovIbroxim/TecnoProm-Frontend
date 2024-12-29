@@ -15,27 +15,21 @@ export default {
     ],
   },
 
-  // Content for all components and pages
   content: [
    
   ],
 
-  // Global CSS
   css: [
     '@/assets/css/tailwind.css',
     '@/assets/fonts/Roboto/stylesheet.css',
   ],
 
-  // Auto import components
   components: true,
 
-  // Modules for dev and build
   buildModules: [],
 
-  // Modules
   modules: [],
 
-  // Build Configuration
   build: {
     transpile: ['axios'],
     postcss: {
@@ -48,7 +42,6 @@ export default {
     },
   },
 
-  // Axios Configuration
   axios: {
     baseURL: 'http://localhost:8000/',
   },

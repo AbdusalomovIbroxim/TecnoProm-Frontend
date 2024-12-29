@@ -23,6 +23,13 @@ body {
   text-decoration: none;
 }
 
+header,
+header .container {
+    height: 75px;
+    display: flex;
+    justify-content: flex-start;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;

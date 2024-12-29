@@ -1,14 +1,8 @@
-import {
-  fetchItems,
-  fetchSellProducts,
-  fetchBuyProducts,
-  fetchProductBySlug,
-} from "../api/products";
-import { submitForm } from "../api/form";
+import { productAPI } from "../api/products";
 
 export default {
   state: {
-    Items: [],
+    items: [],
     totalPages: 0,
     sellProducts: [],
     buyProducts: [],
@@ -17,26 +11,22 @@ export default {
   },
 
   actions: {
-    async fetchItems({ commit }, page = 1) {
+    async fetchItemsWithFilters({ commit }, { filters = {}, page = 1 }) {
       try {
-        const response = await fetchItems(page);
-        const data = response.data;
-
+        const { data } = await productAPI.fetchItems(filters, page);
         commit("setItems", data.results);
-        commit("setTotalPages", data.total_pages);
-
-        console.log("Продукты получены:", data);
+        commit("setTotalPages", data.totalPages);
       } catch (error) {
         console.error("Ошибка при получении продуктов:", error);
       }
     },
+  
+
 
     async fetchSellProducts({ commit }) {
       try {
-        const response = await fetchSellProducts();
-        const data = response.data;
+        const { data } = await productAPI.fetchSellProducts();
         commit("setSellProducts", data);
-        console.log("sell", data);
       } catch (error) {
         console.error("Ошибка при получении продуктов для продажи:", error);
       }
@@ -44,8 +34,7 @@ export default {
 
     async fetchBuyProducts({ commit }) {
       try {
-        const response = await fetchBuyProducts();
-        const data = response.data;
+        const { data } = await productAPI.fetchBuyProducts();
         commit("setBuyProducts", data);
       } catch (error) {
         console.error("Ошибка при получении продуктов для покупки:", error);
@@ -54,8 +43,7 @@ export default {
 
     async fetchProductBySlug({ commit }, slug) {
       try {
-        const response = await fetchProductBySlug(slug);
-        const data = response.data;
+        const { data } = await productAPI.fetchProductBySlug(slug);
         commit("setProduct", data);
       } catch (error) {
         console.error("Ошибка при получении продукта:", error);
@@ -64,7 +52,9 @@ export default {
 
     async submitForm({ commit }, formData) {
       try {
-        await submitForm(formData);
+        console.log("Отправка данных...", formData);
+        
+        await productAPI.submitForm(formData);  // formData теперь объект, а не FormData
         commit("setFormStatus", "success");
         console.log("Данные успешно отправлены.");
       } catch (error) {
@@ -75,50 +65,33 @@ export default {
   },
 
   mutations: {
-    setItems(state, products) {
-      state.Items = products;
+    setItems(state, items) {
+      state.items = items;
     },
-
     setTotalPages(state, totalPages) {
       state.totalPages = totalPages;
     },
-
     setSellProducts(state, products) {
       state.sellProducts = products;
     },
-
     setBuyProducts(state, products) {
       state.buyProducts = products;
     },
-
     setProduct(state, product) {
       state.product = product;
     },
-
     setFormStatus(state, status) {
       state.formStatus = status;
     },
   },
 
   getters: {
-    getItems(state) {
-      return state.Items;
-    },
-
-    getSellProducts(state) {
-      return state.sellProducts;
-    },
-
-    getBuyProducts(state) {
-      return state.buyProducts;
-    },
-
-    getProduct(state) {
-      return state.product;
-    },
-
-    getFormStatus(state) {
-      return state.formStatus;
-    },
+    getItems: (state) => state.items,
+    getSellProducts: (state) => state.sellProducts,
+    getBuyProducts: (state) => state.buyProducts,
+    getProduct: (state) => state.product,
+    getFormStatus: (state) => state.formStatus,
+    getTotalPages: (state) => state.totalPages,  
   },
 };
+

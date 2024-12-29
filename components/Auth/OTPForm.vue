@@ -35,7 +35,7 @@ export default {
         this.error = "";
         const telephone = localStorage.getItem('telephone');
         const response = await verify_phone(telephone, this.otp);
-        if (response.status === 200) {
+        if (response === 200) {
           window.location.href = '/';
         } else {
           this.error = "Неверный код. Попробуйте ещё раз.";

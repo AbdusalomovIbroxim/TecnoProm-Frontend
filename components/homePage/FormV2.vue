@@ -92,7 +92,6 @@
             </div>
           </div>
         </div>
-      <!-- Кнопка отправки формы -->
       <div class="form-submit">
         <button type="submit" class="submit-button">Отправить</button>
       </div>  
@@ -103,40 +102,30 @@
   </div>
 </template>
 
-
-<style scoped>
-
-@import url('@/assets/css/styles.css');
-@import url('@/assets/css/form.css');
-
-</style>
-
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import countryCodes from '../../countryCodes.json';
 
 export default {
   data() {
-  return {
-    formData: {
-      type: 'buy',
-      title: '',
-      description: '',
-      telephone: '',
-      telegram: '',
-    },
-    selectedCategory: null,
-    selectedSubcategories: [],
-    selectedCountry: null,
-    selectedCity: null,
-    selectedTags: [],
-    subcategories: [],
-    tags: [],
-    // selectedImages: [],
-    phonePlaceholder: '',
-  };
-},
-
+    return {
+      formData: {
+        type: 'buy',
+        title: '',
+        description: '',
+        telephone: '',
+        telegram: '',
+      },
+      selectedCategory: null,
+      selectedSubcategories: [],
+      selectedCountry: null,
+      selectedCity: null,
+      selectedTags: [],
+      subcategories: [],
+      tags: [],
+      phonePlaceholder: '',
+    };
+  },
 
   computed: {
     ...mapGetters([
@@ -158,102 +147,85 @@ export default {
     ]),
 
     async handleSubmit() {
-      const formData = new FormData();
-        formData.append('type', 'buy');
-        formData.append('title', this.formData.title);
-        formData.append('description', this.formData.description);
-        formData.append('telephone', this.formData.telephone);
-        formData.append('telegram', this.formData.telegram);
-        formData.append('country_code', this.getCountryCode());
-        formData.append('category', this.selectedCategory);
+      const data = {
+        type: this.formData.type,
+        title: this.formData.title,
+        description: this.formData.description,
+        telephone: this.formData.telephone,
+        telegram: this.formData.telegram,
+        country: this.selectedCountry,
+        city: this.selectedCity,
+        category: this.selectedCategory,
+        subcategories: this.selectedSubcategories,
+        tags: this.selectedTags,
+      };
 
-        // Отправляем как массивы, без JSON.stringify
-        this.selectedSubcategories.forEach((subcategory) => {
-          formData.append('subcategories[]', subcategory); // Используем subcategories[] для отправки массива
-        });
+      await this.submitForm(data);
 
-        this.selectedTags.forEach((tag) => {
-          formData.append('tags[]', tag); // Используем tags[] для отправки массива
-        });
-        formData.append('country', this.selectedCountry);
-        formData.append('city', this.selectedCity);
-        
-        // Обработка изображений
-        // for (const image of this.selectedImages) {
-        //   formData.append('images', image);
-        // }
-
-        await this.submitForm(formData);
-    },
-
-    handleImageUpload(event) {
-      this.selectedImages = event.target.files;
-    },
-
-    getCountryCode() {
-      const country = countryCodes.find(c => c.slug === this.selectedCountry);
-      return country ? country.country_code : '';
     },
 
     resetSubcategoriesAndTags() {
       this.subcategories = [];
       this.selectedSubcategories = [];
-      this.selectedTags = [];
       this.tags = [];
+      this.selectedTags = [];
     },
 
-    updatePhoneCode() {
-      this.phonePlaceholder = this.getCountryCode();
-      this.formData.phone = `${this.phonePlaceholder} `;
+    async updatePhoneCode() {
+      const country = countryCodes.find((c) => c.id === this.selectedCountry);
+      this.phonePlaceholder = country ? country.country_code : '';
     },
   },
 
   watch: {
-    selectedCategory(newCategory) {
+    selectedCategory(newCategoryId) {
       this.resetSubcategoriesAndTags();
-      if (newCategory) {
-        this.fetchSubcategories(newCategory).then((data) => {
-          this.subcategories = data || [];
-        });
+      if (newCategoryId) {
+        this.fetchSubcategories(newCategoryId)
+          .then((subcategories) => {
+            console.log('newCategoryId:', newCategoryId, 'Type:', typeof newCategoryId);
+            
+            this.subcategories = subcategories || [];
+          })
+          .catch((error) => {
+            console.error('Ошибка при загрузке подкатегорий:', error);
+          });
       }
     },
 
     selectedSubcategories(newSubcategories) {
-      this.tags = [];
-      this.selectedTags = [];
       if (newSubcategories.length > 0) {
         const params = {
-          category_id: this.selectedCategory,
-          subcategory_ids: newSubcategories,
+          categoryId: this.selectedCategory,
+          subcategoryIds: newSubcategories,
         };
-        this.fetchTags(params).then((data) => {
-          this.tags = data || [];
+        this.fetchTags(params).then((tags) => {
+          this.tags = tags || [];
+          console.log('Fetched tags:', this.tags);
+        }).catch((error) => {
+          console.error('Error fetching tags:', error);
         });
       }
     },
 
+
     selectedCountry(newCountry) {
-      console.log('selectedCountry:', newCountry);
       this.selectedCity = null;
-
-      if (newCountry === 1) {
-        this.fetchCities();
+      if (newCountry) {
+        this.fetchCities({ countryId: newCountry });
+        this.updatePhoneCode();
       }
-
-      this.updatePhoneCode();
     },
-
-
   },
 
   async mounted() {
-    await Promise.all([
-      this.fetchCategories(),
-      this.fetchCountries(),
-    ]);
+    await Promise.all([this.fetchCategories(), this.fetchCountries()]);
   },
 };
 </script>
+
+
+
 
 <style scoped>
 @import url('@/assets/css/styles.css');

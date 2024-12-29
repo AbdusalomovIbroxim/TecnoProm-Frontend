@@ -1,6 +1,7 @@
+<!-- cardbase.vue -->
+
 <template>
   <div class="card">
-    <!-- Контент для типа sell -->
     <div v-if="type === 'sell'" class="card__content">
       <div v-if="image" class="card__image">
         <img 
@@ -28,23 +29,25 @@
       </p>
     </div>
 
-    <!-- Контент для типа buy -->
     <div v-else-if="type === 'buy'" class="card__content">
+      <p style="display: flex; align-items: center;">
+        <img 
+          :src="category.icon" 
+          alt="Category Icon" 
+          style="width: 20px; height: 20px; margin-right: 8px;"
+        />
+        {{ category.name }}
+      </p>
       <h1 class="title">
-        {{ title }} (Покупка)
+        {{ title }} 
       </h1>
 
       <p v-if="description" class="description">
         {{ description }}
       </p>
 
-      <div class="special-content">
-        <!-- Уникальный контент для типа "buy" -->
-        <p>Этот продукт доступен для покупки!</p>
-      </div>
     </div>
 
-    <!-- Footer (общий для обоих типов) -->
     <div class="card__footer">
       <div class="product-info">
         <span class="country">{{ country }}</span>
@@ -63,7 +66,7 @@
 <script>
   export default {
     props: {
-      type: String, // Тип продукта ('sell' или 'buy')
+      type: String,
       image: String,
       title: String,
       description: String,

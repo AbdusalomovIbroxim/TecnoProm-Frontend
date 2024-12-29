@@ -91,8 +91,8 @@
         <button type="submit" class="submit-button">Отправить</button>
       </form>
 
-      <div v-if="getFormStatus === 'success'" class="status-message success">Данные успешно отправлены!</div>
-      <div v-if="getFormStatus === 'error'" class="status-message error">Произошла ошибка при отправке данных.</div>
+      <!-- <div v-if="getFormStatus === 'success'" class="status-message success">Данные успешно отправлены!</div>
+      <div v-if="getFormStatus === 'error'" class="status-message error">Произошла ошибка при отправке данных.</div> -->
     </div>
 </template>
 
@@ -136,7 +136,7 @@ export default {
       'getCategories',
       'getCountries',
       'getCities',
-      'getFormStatus',
+      // 'getFormStatus',
     ]),
   },
 

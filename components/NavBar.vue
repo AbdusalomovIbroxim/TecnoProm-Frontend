@@ -68,13 +68,9 @@
 </template>
 
 <script>
+import { fetchUser } from "@/api/auth";
+
 export default {
-  props: {
-    isAuthenticated: {
-      type: Boolean,
-      required: true,
-    },
-  },
   data() {
     return {
       dropdowns: {
@@ -82,9 +78,26 @@ export default {
         directionDropdown: false,
         languageDropdown: false,
       },
+      isAuthenticated: false,
     };
   },
   methods: {
+    async checkAuthentication() {
+      const accessToken = localStorage.getItem("access_token");
+      
+      if (accessToken) {
+        try {
+          const user = await fetchUser();
+          if (user) {
+            this.isAuthenticated = true;
+          }
+        } catch (error) {
+          this.isAuthenticated = false;
+        }
+      } else {
+        this.isAuthenticated = false;
+      }
+    },
     toggleDropdown(dropdown) {
       Object.keys(this.dropdowns).forEach((key) => {
         if (key !== dropdown) {
@@ -99,16 +112,17 @@ export default {
       });
     },
     handleOutsideClick(event) {
-      if (!event.target.closest('.dropdown')) {
+      if (!event.target.closest(".dropdown")) {
         this.closeDropdowns();
       }
     },
   },
-  mounted() {
-    document.addEventListener('click', this.handleOutsideClick);
+  async mounted() {
+    document.addEventListener("click", this.handleOutsideClick);
+    await this.checkAuthentication();
   },
   beforeDestroy() {
-    document.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener("click", this.handleOutsideClick);
   },
 };
 </script>

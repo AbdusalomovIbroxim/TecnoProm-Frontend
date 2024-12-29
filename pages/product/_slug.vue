@@ -1,26 +1,52 @@
 <template>
-    <div v-if="product">
-      <h1>{{ product.title }}</h1>
-      <p>{{ product.description }}</p>
-      <!-- Тут можно отобразить другие данные продукта -->
+  <div>
+    <HeaderSection />
+    <div class="container">
+      <section class="product-details" style="padding-bottom: 50px">
+        <div class="product-detail">
+          <div class="product-foto-and-info">
+            <ProductPhoto :product="product" />
+            <ProductDescription :product="product" />
+            <ContactSeller :product="product" />
+          </div>
+          <ListingInfo :product="product" :isFavorite="isFavorite" />
+        </div>
+        <AuthorProducts :authorProducts="authorProducts" />
+        <SimilarProducts :similarProducts="similarProducts" />
+      </section>
     </div>
-    <div v-else>
-      <p>Загрузка...</p>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    async mounted() {
-      const slug = this.$route.params.slug; // Получаем slug из URL
-      await this.$store.dispatch('fetchProductBySlug', slug); // Загружаем продукт
-    },
-  
-    computed: {
-      product() {
-        return this.$store.getters.getProduct; // Получаем продукт из store
-      }
-    }
-  };
-  </script>
-  
+    <FooterSection />
+  </div>
+</template>
+
+<script>
+import HeaderSection from '@/components/HeaderSection.vue';
+import FooterSection from '@/components/FooterSection.vue';
+import ProductPhoto from '@/components/ProductPhoto.vue';
+import ProductDescription from '@/components/ProductDescription.vue';
+import ContactSeller from '@/components/ContactSeller.vue';
+import ListingInfo from '@/components/ListingInfo.vue';
+import AuthorProducts from '@/components/AuthorProducts.vue';
+import SimilarProducts from '@/components/SimilarProducts.vue';
+
+export default {
+  components: {
+    HeaderSection,
+    FooterSection,
+    ProductPhoto,
+    ProductDescription,
+    ContactSeller,
+    ListingInfo,
+    AuthorProducts,
+    SimilarProducts,
+  },
+  data() {
+    return {
+      product: {},
+      isFavorite: false,
+      authorProducts: [],
+      similarProducts: [],
+    };
+  },
+};
+</script>

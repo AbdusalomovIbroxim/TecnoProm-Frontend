@@ -1,3 +1,5 @@
+<!-- cardlist.vue -->
+
 <template>
   <div class="cards">
     <CardBase
@@ -6,7 +8,7 @@
       :type="product.type"
       :title="truncateText(product.title, 50)"
       :description="product.type === 'buy' ? truncateText(product.description, 100) : null"
-      :image="product.type === 'sell' && product.images.length > 0 ? `http://localhost:8000${product.images[0].image}` : null"
+      :image="product.type === 'sell' && product.images.length > 0 ? `${product.images[0].image}` : null"
       :category="getCategoryName(product.category)"
       :country="String(product.country)"
       :date="formatDate(product.create_date)"
@@ -47,8 +49,7 @@
       },
       
       getCategoryName(categoryId) {
-        console.log('categorii', this.getCategories);
-
+        console.log('categoryId:', categoryId);  // Проверим, что приходят данные
         const category = this.getCategories.find((cat) => cat.id === categoryId);
         
         if (category) {
@@ -64,6 +65,7 @@
       },
 
 
+
     },
 
     async mounted() {
@@ -71,6 +73,7 @@
     if (!this.getCategories.length) {
       await this.fetchCategories();
     }
+    console.log(this.products);
   },
   };
   </script>

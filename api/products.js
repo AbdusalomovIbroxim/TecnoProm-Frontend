@@ -1,17 +1,9 @@
-import axios from "./axios";
+import api from "./axios";
 
-export const fetchItems = (page = 1) => {
-  return axios.get(`/products/list?page=${page}`);
-};
-
-export const fetchSellProducts = () => {
-  return axios.get("products/recent/?type=sell");
-};
-
-export const fetchBuyProducts = () => {
-  return axios.get("products/recent/?type=buy");
-};
-
-export const fetchProductBySlug = (slug) => {
-  return axios.get(`products/${slug}/`);
+export const productAPI = {
+  fetchItems: (filters, page = 1) => api.get(`/products/list?page=${page}`, { params: filters }),
+  fetchSellProducts: () => api.get("products/recent/?type=sell"),
+  fetchBuyProducts: () => api.get("products/recent/?type=buy"),
+  fetchProductBySlug: (slug) => api.get(`products/${slug}/`),
+  submitForm: (formData) => api.post("products/", formData),
 };
