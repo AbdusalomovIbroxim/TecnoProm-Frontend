@@ -70,10 +70,10 @@
 
 
         <div class="form-group">
-          <label for="telephone">Телефон:</label>
+          <label for="phone_number">Телефон:</label>
           <input
             type="tel"
-            v-model="formData.telephone"
+            v-model="formData.phone_number"
             id="phone"
             class="form-input"
             :placeholder="phonePlaceholder"
@@ -91,8 +91,6 @@
         <button type="submit" class="submit-button">Отправить</button>
       </form>
 
-      <!-- <div v-if="getFormStatus === 'success'" class="status-message success">Данные успешно отправлены!</div>
-      <div v-if="getFormStatus === 'error'" class="status-message error">Произошла ошибка при отправке данных.</div> -->
     </div>
 </template>
 
@@ -115,7 +113,7 @@ export default {
       type: 'buy',
       title: '',
       description: '',
-      telephone: '',
+      phone_number: '',
       telegram: '',
     },
     selectedCategory: null,
@@ -125,7 +123,6 @@ export default {
     selectedTags: [],
     subcategories: [],
     tags: [],
-    // selectedImages: [],
     phonePlaceholder: '',
   };
 },
@@ -136,7 +133,6 @@ export default {
       'getCategories',
       'getCountries',
       'getCities',
-      // 'getFormStatus',
     ]),
   },
 
@@ -155,27 +151,21 @@ export default {
         formData.append('type', 'buy');
         formData.append('title', this.formData.title);
         formData.append('description', this.formData.description);
-        formData.append('telephone', this.formData.telephone);
+        formData.append('phone_number', this.formData.phone_number);
         formData.append('telegram', this.formData.telegram);
         formData.append('country_code', this.getCountryCode());
         formData.append('category', this.selectedCategory);
 
-        // Отправляем как массивы, без JSON.stringify
         this.selectedSubcategories.forEach((subcategory) => {
-          formData.append('subcategories[]', subcategory); // Используем subcategories[] для отправки массива
+          formData.append('subcategories[]', subcategory);
         });
 
         this.selectedTags.forEach((tag) => {
-          formData.append('tags[]', tag); // Используем tags[] для отправки массива
+          formData.append('tags[]', tag);
         });
         formData.append('country', this.selectedCountry);
         formData.append('city', this.selectedCity);
         
-        // Обработка изображений
-        // for (const image of this.selectedImages) {
-        //   formData.append('images', image);
-        // }
-
         await this.submitForm(formData);
     },
 
@@ -226,15 +216,12 @@ export default {
     },
 
     selectedCountry(newCountry) {
-      console.log('selectedCountry:', newCountry);
-      this.selectedCity = null; // Сбрасываем выбранный город
+      this.selectedCity = null;
 
-      // Загружаем города только если selectedCountry === 1
       if (newCountry === 1) {
-        this.fetchCities(); // Вызываем загрузку городов
+        this.fetchCities();
       }
 
-      // Обновляем placeholder для телефона
       this.updatePhoneCode();
     },
 

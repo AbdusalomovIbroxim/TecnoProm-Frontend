@@ -1,5 +1,35 @@
 // /api/auth.js
-import api from './axios';  // Путь к вашему экземпляру Axios
+import api from './axios';
+
+export const saveCSRFToken = async () => {
+  try {
+    const csrfResponse = await api.get('/auth/csrf-token/');
+    sessionStorage.setItem('csrf_token', csrfResponse.data.csrf_token);
+    return csrfResponse.data.csrf_token;
+  } catch (error) {
+    console.error('Ошибка при получении CSRF токена:', error.message);
+    throw error;
+  }
+};
+
+export const checkAuthStatus = async () => {
+  try {
+    const response = await api.get('/auth/check-status/', {
+      headers: {
+        'X-CSRFToken': sessionStorage.getItem('csrf_token'),
+      }
+    })
+    if (response.status === 200) {
+      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('refresh_token', response.data.refresh_token);
+    }
+    return response.status;
+  } catch (error) {
+    console.error('Ошибка при проверке статуса авторизации:', error.message);
+    throw error;
+  }
+};
+
 
 export const fetchUser = async () => {
   try {
@@ -94,31 +124,10 @@ export const logout = async () => {
   try {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('csrf_token');
     return true;
   } catch (error) {
     console.error('Ошибка при выходе из системы:', error.message);
     throw new Error('Ошибка при выходе из системы: ' + error.message);
   }
 };
-
-// export const checkAuth = async () => {
-//   try {
-//     const accessToken = localStorage.getItem("access_token");
-//     const refreshTokenValue = localStorage.getItem("refresh_token");
-
-//     if (!accessToken && !refreshTokenValue) {
-//       throw new Error("Пользователь не авторизован.");
-//     }
-
-//     const refreshed = await refreshToken();
-//     if (!refreshed) {
-//       throw new Error("Не удалось обновить токены.");
-//     }
-
-//     const user = await fetchUser();
-//     return user;
-//   } catch (error) {
-//     console.error("Ошибка авторизации:", error.message);
-//     throw error;
-//   }
-// };

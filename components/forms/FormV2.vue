@@ -16,11 +16,11 @@
             </div>
 
             <div class="form-group">
-              <label for="telephone">Телефон:</label>
+              <label for="phone_number">Телефон:</label>
               <input
                 type="tel"
-                v-model="formData.telephone"
-                id="telephone"
+                v-model="formData.phone_number"
+                id="phone_number"
                 class="form-input"
                 :placeholder="phonePlaceholder"
                 required
@@ -113,7 +113,7 @@ export default {
         type: 'buy',
         title: '',
         description: '',
-        telephone: '',
+        phone_number: '',
         telegram: '',
       },
       selectedCategory: null,
@@ -151,7 +151,7 @@ export default {
         type: this.formData.type,
         title: this.formData.title,
         description: this.formData.description,
-        telephone: this.formData.telephone,
+        phone_number: this.formData.phone_number,
         telegram: this.formData.telegram,
         country: this.selectedCountry,
         city: this.selectedCity,
@@ -183,7 +183,6 @@ export default {
       if (newCategoryId) {
         this.fetchSubcategories(newCategoryId)
           .then((subcategories) => {
-            console.log('newCategoryId:', newCategoryId, 'Type:', typeof newCategoryId);
             
             this.subcategories = subcategories || [];
           })
@@ -201,7 +200,6 @@ export default {
         };
         this.fetchTags(params).then((tags) => {
           this.tags = tags || [];
-          console.log('Fetched tags:', this.tags);
         }).catch((error) => {
           console.error('Error fetching tags:', error);
         });

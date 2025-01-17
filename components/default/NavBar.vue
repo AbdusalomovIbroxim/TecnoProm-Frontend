@@ -36,7 +36,7 @@
 
         <div class="navbar-logo">
           <a href="/" class="logo">
-            <img src="../static/images/TECNOPROM-LOGO.png" alt="Логотип" />
+            <img src="@/static/images/TECNOPROM-LOGO.png" alt="Логотип" />
           </a>
         </div>
 
@@ -128,5 +128,5 @@ export default {
 </script>
 
 <style>
-@import url('../assets/css/styles.css');
+@import url('@/assets/css/styles.css');
 </style>

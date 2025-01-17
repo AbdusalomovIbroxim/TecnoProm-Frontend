@@ -5,7 +5,6 @@ export const fetchCategories = () => {
 };
 
 export const fetchSubcategories = (categoryId) => {
-  console.log("categoryId", categoryId);
   return api.get(`/resources/subcategories/?category_id=${categoryId}`);
 };
 

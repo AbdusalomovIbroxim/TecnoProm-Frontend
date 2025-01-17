@@ -2,7 +2,7 @@ import axios from 'axios';
 import { refreshToken } from './auth';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api/',
+    baseURL: 'http://2025.tecnoprom.uz/api/',
     headers: {
         'Content-Type': 'application/json'
     }

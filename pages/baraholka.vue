@@ -49,7 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import NavBar from "../components/NavBar.vue";
+import NavBar from "../components/default/NavBar.vue";
 import CardList from "../components/card/CardList.vue";
 
 export default {
@@ -68,12 +68,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getItems", "getCategories", "getTotalPages"]), // используем getTotalPages для получения общего количества страниц
+    ...mapGetters(["getItems", "getCategories", "getTotalPages"]),
   },
   methods: {
     ...mapActions(["fetchItemsWithFilters"]),
     updateFilters() {
-      this.page = 1; // сбрасываем на первую страницу
+      this.page = 1;
       this.updateURL();
       this.fetchItemsWithFilters({ filters: this.filters, page: this.page });
     },
@@ -108,14 +108,12 @@ export default {
     },
   },
   async mounted() {
-    // Инициализация фильтров из маршрута
     const { page, type, category, name } = this.$route.query;
     this.filters.type = type || "";
     this.filters.category = category || "";
     this.filters.name = name || "";
     this.page = parseInt(page) || 1;
 
-    // Загрузка данных с фильтрами и текущей страницей
     await this.fetchItemsWithFilters({ filters: this.filters, page: this.page });
   },
 };

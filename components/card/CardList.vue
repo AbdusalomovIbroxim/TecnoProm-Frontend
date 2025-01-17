@@ -49,7 +49,6 @@
       },
       
       getCategoryName(categoryId) {
-        console.log('categoryId:', categoryId);  // Проверим, что приходят данные
         const category = this.getCategories.find((cat) => cat.id === categoryId);
         
         if (category) {

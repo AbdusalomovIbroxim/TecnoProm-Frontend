@@ -1,25 +1,24 @@
+<!-- filepath: /c:/Frontt/my-nuxt-project/pages/product/save.vue -->
 <template>
-  <div class="order-placement">
-    <NavBar />
-    <h1>Размещение заказа</h1>
-    <OrderForm />
-  </div>
-</template>
-
-<style>
-@import '@/assets/css/styles.css';
-</style>
+    <div class="container">
+        <NavBar></NavBar>
+        <FormV2 ref="formV2" />
+    </div>
+  </template>
   
-<script>
-import NavBar from '@/components/NavBar.vue';
-import OrderForm from '@/components/homePage/Form.vue';
-
-export default {
-  components: {
-    OrderForm,
-    NavBar,
-  },
-};
-</script>
-
+  <script>
+  import NavBar from '@/components/default/NavBar.vue';
+  import FormV2 from '@/components/forms/FormV2.vue';
   
+  export default {
+    components: {
+        NavBar,
+        FormV2,
+    },
+    methods: {
+      handleSubmit() {
+        // this.$refs.formV2.handleSubmit();
+      },
+    },
+  };
+  </script>

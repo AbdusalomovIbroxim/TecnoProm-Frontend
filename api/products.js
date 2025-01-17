@@ -6,4 +6,5 @@ export const productAPI = {
   fetchBuyProducts: () => api.get("products/recent/?type=buy"),
   fetchProductBySlug: (slug) => api.get(`products/${slug}/`),
   submitForm: (formData) => api.post("products/", formData),
+  fetchUserProducts: () => api.get(`users/products/`),
 };
